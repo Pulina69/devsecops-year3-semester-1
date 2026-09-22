@@ -38,3 +38,4 @@ The application runs in a completely offline, containerised environment orchestr
    ```bash
    git clone git@github.com:Pulina69/devsecops-year3-semester-1.git
    cd devsecops-year3-semester-1
+
