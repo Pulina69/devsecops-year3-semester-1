@@ -11,7 +11,7 @@ This repository contains the DevSecOps continuous integration and delivery pipel
 | Role | Student Name | Student ID | Key Responsibilities |
 | :--- | :--- | :--- | :--- |
 | **Member 1** | [Name] | [ID] | Container Architecture, Hardening, Docker Compose |
-| **Member 2** | [Name] | [ID] | STRIDE Threat Modelling, Risk Matrix |
+| **Member 2** | Aluthge M.N | IT24102268 | STRIDE Threat Modelling, Risk Matrix |
 | **Member 3** | Pulina Pethvan | [ID] | Vulnerability Exploitation, Secure Coding Fixes, SAST |
 | **Member 4** | [Name] | [ID] | CI/CD Pipeline Automation, Secrets Management |
 
