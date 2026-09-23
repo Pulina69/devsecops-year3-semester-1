@@ -56,38 +56,22 @@ function UserDAO(db) {
     };
 
     this.validateLogin = (userName, password, callback) => {
-
-        // Helper function to compare passwords
-        const comparePassword = (fromDB, fromUser) => {
-            return fromDB === fromUser;
-            /*
-            // Fix for A2-Broken Auth
-            // compares decrypted password stored in this.addUser()
-            return bcrypt.compareSync(fromDB, fromUser);
-            */
-        };
-
-        // Callback to pass to MongoDB that validates a user document
-        const validateUserDoc = (err, user) => {
-
-            if (err) return callback(err, null);
-
-            if (user) {
-                if (comparePassword(password, user.password)) {
-                    callback(null, user);
-                } else {
-                    const invalidPasswordError = new Error("Invalid password");
-                    // Set an extra field so we can distinguish this from a db error
-                    invalidPasswordError.invalidPassword = true;
-                    callback(invalidPasswordError, null);
-                }
-            } else {
-                const noSuchUserError = new Error("User: " + user + " does not exist");
-                // Set an extra field so we can distinguish this from a db error
-                noSuchUserError.noSuchUser = true;
-                callback(noSuchUserError, null);
-            }
-        };
+    // VULNERABLE: Passes raw, unvalidated input directly to MongoDB
+    usersCol.findOne({
+        userName: userName,
+        password: password 
+    }, (err, user) => {
+        if (err) return callback(err, null);
+        
+        if (user) {
+            callback(null, user); // Logs the user in!
+        } else {
+            const invalidPasswordError = new Error("Invalid password");
+            invalidPasswordError.invalidPassword = true;
+            callback(invalidPasswordError, null);
+        }
+    });
+};
 
         usersCol.findOne({
             userName: userName
