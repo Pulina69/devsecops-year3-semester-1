@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 1
 
       - name: 1. Secret Scanning Gate (Gitleaks)
         uses: gitleaks/gitleaks-action@v2
