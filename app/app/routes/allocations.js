@@ -12,6 +12,7 @@ function AllocationsHandler(db) {
        
         const { userId } = req.session; 
         
+        
         if (parseInt(req.params.userId, 10) !== userId) {
             return res.status(403).send("HTTP 403 Forbidden: Access Denied. You can only view your own allocations.");
         }
