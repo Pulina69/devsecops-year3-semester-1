@@ -9,24 +9,16 @@ function AllocationsHandler(db) {
     const allocationsDAO = new AllocationsDAO(db);
 
     this.displayAllocations = (req, res, next) => {
-        /*
-        // Fix for A4 Insecure DOR -  take user id from session instead of from URL param
-        const { userId } = req.session;
-        */
-        const {
-            userId
-        } = req.params;
-        const {
-            threshold
-        } = req.query;
+       
+        const { userId } = req.session; 
+        
+        if (parseInt(req.params.userId, 10) !== userId) {
+            return res.status(403).send("HTTP 403 Forbidden: Access Denied. You can only view your own allocations.");
+        }
 
-        allocationsDAO.getByUserIdAndThreshold(userId, threshold, (err, allocations) => {
+        allocationsDAO.getByUserId(parseInt(userId), (err, allocations) => {
             if (err) return next(err);
-            return res.render("allocations", {
-                userId,
-                allocations,
-                environmentalScripts
-            });
+            return res.render("allocations", { userId, allocations, environmentalScripts });
         });
     };
 }
