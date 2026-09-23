@@ -56,22 +56,31 @@ function UserDAO(db) {
     };
 
     this.validateLogin = (userName, password, callback) => {
-    // VULNERABLE: Passes raw, unvalidated input directly to MongoDB
-    usersCol.findOne({
-        userName: userName,
-        password: password 
-    }, (err, user) => {
-        if (err) return callback(err, null);
-        
-        if (user) {
-            callback(null, user); // Logs the user in!
-        } else {
-            const invalidPasswordError = new Error("Invalid password");
-            invalidPasswordError.invalidPassword = true;
-            callback(invalidPasswordError, null);
-        }
-    });
-};
+
+        const comparePassword = (fromDB, fromUser) => {
+            return fromDB === fromUser;
+     
+        };
+
+        const validateUserDoc = (err, user) => {
+
+            if (err) return callback(err, null);
+
+            if (user) {
+                if (comparePassword(password, user.password)) {
+                    callback(null, user);
+                } else {
+                    const invalidPasswordError = new Error("Invalid password");
+
+                    invalidPasswordError.invalidPassword = true;
+                    callback(invalidPasswordError, null);
+                }
+            } else {
+                const noSuchUserError = new Error("User: " + user + " does not exist");
+                noSuchUserError.noSuchUser = true;
+                callback(noSuchUserError, null);
+            }
+        };
 
         usersCol.findOne({
             userName: userName
