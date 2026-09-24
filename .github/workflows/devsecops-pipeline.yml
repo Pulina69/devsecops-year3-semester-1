@@ -1,11 +1,9 @@
 name: DevSecOps CI/CD Pipeline
-
 on:
   push:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
-
 jobs:
   security-gates:
     runs-on: ubuntu-latest
@@ -14,28 +12,23 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: 1. Secret Scanning Gate (Gitleaks)
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 2. SAST Scan Gate (Semgrep)
         run: |
           pip install semgrep
           semgrep scan --config auto app/ 
         continue-on-error: true # Warns but does not block to allow downstream gates to run
-
       - name: 3. SCA / Dependency Scan Gate (npm audit)
         run: |
           cd app
           npm install --package-lock-only
           npm audit --audit-level=high
         continue-on-error: true
-
       - name: Build Application Container
         run: docker build -t pulina/nodegoat:latest -f docker/Dockerfile .
-
       - name: 4. Container Image Scan Gate (Trivy)
         uses: aquasecurity/trivy-action@master
         with:

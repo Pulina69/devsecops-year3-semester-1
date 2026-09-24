@@ -55,7 +55,13 @@ function UserDAO(db) {
     };
 
     this.validateLogin = (userName, password, callback) => {
-
+   
+        if (typeof userName !== 'string' || typeof password !== 'string') {
+            const invalidInputError = new Error("Invalid input");
+            return callback(invalidInputError, null);
+        }    
+    
+    
         const comparePassword = (plainTextPassword, hashedPassword) => {
             return bcrypt.compareSync(plainTextPassword, hashedPassword);
         };
