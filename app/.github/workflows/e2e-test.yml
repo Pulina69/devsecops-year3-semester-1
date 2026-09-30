@@ -1,3 +1,5 @@
+# E2E testing checks the application from the users
+
 name: E2E Test
 on: [push, pull_request]
 
